@@ -267,8 +267,23 @@ function addClient( ws, id, sdp, callback ) {
                 return callback(error);
             }
             clients[id].hubPort = _hubPort;
-            clients[id].webRtcEndpoint.connect(clients[id].hubPort);
-            clients[id].hubPort.connect(clients[id].webRtcEndpoint);
+            console.log("connecting  webRtcEndpoint");
+	    //clients[id].webRtcEndpoint.connect(clients[id].hubPort);
+             clients[id].webRtcEndpoint.connect(clients[id].hubPort, "AUDIO" , function(error) {
+		   if (error) {
+			console.log("Error connecting  webRtcEndpoint " + error);
+			return callback(error);
+		   }
+		});
+		
+		console.log("connecting  hubPort");
+            //clients[id].hubPort.connect(clients[id].webRtcEndpoint);
+             clients[id].hubPort.connect(clients[id].webRtcEndpoint, "AUDIO" , function(error) {
+		   if (error) {
+			console.log("Error connecting  hubPort " + error);
+			return callback(error);
+		   }
+		});
         });
     });
 }
